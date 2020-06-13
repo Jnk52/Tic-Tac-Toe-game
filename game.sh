@@ -32,7 +32,7 @@ toss() {
 letterSymbol() {
         if [[ $tossDecision -eq $player ]]
         then
-                read -p "SELECT THE LETTER SYMBOL x OR o TO PLAY THE GAME: " playerSymbol
+                read -p "SELECT THE LETTER SYMBOL [x/o] TO PLAY THE GAME: " playerSymbol
                 if [ "$playerSymbol" == "o" ]
                 then
                         computerSymbol="x"
@@ -117,8 +117,6 @@ Tie() {
         done
 }
 
-
-
 #LETS ASSUME FIRST PLAYER STARTS TO PLAY
 playerStarts() {
         echo "****player starts****"
@@ -169,18 +167,13 @@ computerInitiates() {
                 if [ -z "${sheet[$box]}" ]
                 then
                         sheet[$box]="$computerSymbol"
-      echo "computer win check"
                         player="computer"
                         checkWinner $computerSymbol $player
+			Tie
                         sheet[$box]=""
-
-                   if (( $box == 9 ))
-                then
-                         echo "This does not conclude win, keep playing"
-                         opponentBlocking
-                        fi
                 fi
         done
+                        opponentBlocking
 
 }
 #LETS CREATE A FUNCTION TO BLOCK THE OPPONENT
@@ -191,18 +184,15 @@ opponentBlocking() {
                 if [ -z "${sheet[$cell]}" ]
                 then
                         sheet[$cell]="$playerSymbol"
-                        echo "take a look for player winning condition and if present then blocking them"
                         checkWinningOfOpp "$playerSymbol"
                         sheet[$cell]=""
+                fi
+        done
 
                         if [ $cell -eq 9 ]
                         then
-                                echo "********Do not have any cell for blocking********"
-
                                 cornerPlay
                         fi
-                fi
-        done
 }
 
 #FUNCTION TO DETERMINE CORNER CONDITION
@@ -301,8 +291,3 @@ letterSymbol
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 resumeGame
-
-
-
-
-
