@@ -117,6 +117,8 @@ Tie() {
         done
 }
 
+
+
 #LETS ASSUME FIRST PLAYER STARTS TO PLAY
 playerStarts() {
         echo "****player starts****"
@@ -167,12 +169,12 @@ computerInitiates() {
                 if [ -z "${sheet[$box]}" ]
                 then
                         sheet[$box]="$computerSymbol"
-                        echo "computer win check"
+      echo "computer win check"
                         player="computer"
-
-  checkWinner $computerSymbol $player
+                        checkWinner $computerSymbol $player
                         sheet[$box]=""
-                if (( $box == 9 ))
+
+                   if (( $box == 9 ))
                 then
                          echo "This does not conclude win, keep playing"
                          opponentBlocking
@@ -232,6 +234,7 @@ centreplay() {
                 sheet[5]="$computerSymbol"
         else
                 echo "********There is no centre to block********"
+                echo "********Do random check if any********"
                 computerPlay
         fi
 }
@@ -298,3 +301,8 @@ letterSymbol
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 resumeGame
+
+
+
+
+
