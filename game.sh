@@ -157,11 +157,6 @@ computerPlay() {
         fi
         echo "****computer played****"
 }
-computerWinCheck() {
-        win="computer"
-        sheet[computerPosition]=$computerSymbol
-        checkWinner $computerSymbol $win
-}
 
 
 computerInitiates() {
@@ -169,20 +164,79 @@ computerInitiates() {
         do
                 if [ -z "${sheet[$box]}" ]
                 then
-	 sheet[$box]="$computerSymbol"
+ sheet[$box]="$computerSymbol"
                         echo "computer win check"
                         player="computer"
                         checkWinner $computerSymbol $player
                         sheet[$box]=""
-
-                        if (( $box == 9 ))
+			 if (( $box == 9 ))
                         then
                                 echo "This does not conclude win, keep playing"
-                                computerPlay
+                                opponentBlocking
                         fi
                 fi
         done
 
+}
+#LETS CREATE A FUNCTION TO BLOCK THE OPPONENT
+opponentBlocking() {
+        echo "********BLOCKING THE OPPONENT********"
+        for (( cell=1;cell<10;cell++ ))
+        do
+                if [ -z "${sheet[$cell]}" ]
+                then
+                        sheet[$cell]="$playerSymbol"
+                        echo "take a look for player winning condition and if present then blocking them"
+                        checkWinningOfOpp "$playerSymbol"
+                        sheet[$cell]=""
+
+                        if [ $cell -eq 9 ]
+                        then
+                                echo "********Do not have any cell for blocking********"
+
+                                computerPlay
+                        fi
+                fi
+        done
+}
+
+#ANALYSING PLAYWER WINNING CELL FOR BLOCKING
+checkWinningOfOpp() {
+
+        symbol2=$1
+        if [[ ${sheet[1]} == $symbol2 && ${sheet[2]} == $symbol2 && ${sheet[3]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[4]} == $symbol2 && ${sheet[5]} == $symbol2 && ${sheet[6]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[7]} == $symbol2 && ${sheet[8]} == $symbol2 && ${sheet[9]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[1]} == $symbol2 && ${sheet[4]} == $symbol2 && ${sheet[7]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[2]} == $symbol2 && ${sheet[5]} == $symbol2 && ${sheet[8]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[3]} == $symbol2 && ${sheet[6]} == $symbol2 && ${sheet[9]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[1]} == $symbol2 && ${sheet[5]} == $symbol2 && ${sheet[9]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        elif [[ ${sheet[3]} == $symbol2 && ${sheet[5]} == $symbol2 && ${sheet[7]} == $symbol2 ]]
+        then
+                sheet[$cell]="$computerSymbol"
+                cell=10
+        fi
 }
 
 #Resume the game
@@ -208,5 +262,6 @@ letterSymbol
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 resumeGame
+
 
 
