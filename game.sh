@@ -141,11 +141,11 @@ playerStarts() {
         fi
 }
 
-#COMPUTER STARTS TO PLAY LIKE PLAYER
+#COMPUTER STARTS TO PLAY
 computerPlay() {
         echo "****computer plays****"
         win2="computer"
-        computerPosition=$((RANDOM%8))
+        computerPosition=$((1+RANDOM%9))
         if [ -z "${sheet[$computerPosition]}" ]
         then
                 sheet[$computerPosition]=$computerSymbol
@@ -154,11 +154,36 @@ computerPlay() {
                 Tie
         else
                 computerPlay
-
         fi
         echo "****computer played****"
 }
+computerWinCheck() {
+        win="computer"
+        sheet[computerPosition]=$computerSymbol
+        checkWinner $computerSymbol $win
+}
 
+
+computerInitiates() {
+        for (( box=1;box<10;box++ ))
+        do
+                if [ -z "${sheet[$box]}" ]
+                then
+	 sheet[$box]="$computerSymbol"
+                        echo "computer win check"
+                        player="computer"
+                        checkWinner $computerSymbol $player
+                        sheet[$box]=""
+
+                        if (( $box == 9 ))
+                        then
+                                echo "This does not conclude win, keep playing"
+                                computerPlay
+                        fi
+                fi
+        done
+
+}
 
 #Resume the game
 resumeGame() {
@@ -167,12 +192,12 @@ resumeGame() {
                 while [ $flag -eq 1 ]
                 do
                         playerStarts
-                        computerPlay
+                        computerInitiates
                 done
- else
+        else
                 while [ $flag -eq 1  ]
                 do
-                        computerPlay
+                        computerInitiates
                         playerStarts
                 done
         fi
@@ -183,4 +208,5 @@ letterSymbol
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 resumeGame
+
 
