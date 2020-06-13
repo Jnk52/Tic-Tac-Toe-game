@@ -32,7 +32,7 @@ toss() {
 letterSymbol() {
         if [[ $tossDecision -eq $player ]]
         then
-                read -p "SELECT THE LETTER SYMBOL [x/o] TO PLAY THE GAME: " playerSymbol
+                read -p "SELECT THE LETTER SYMBOL x OR o TO PLAY THE GAME: " playerSymbol
                 if [ "$playerSymbol" == "o" ]
                 then
                         computerSymbol="x"
@@ -101,16 +101,18 @@ checkWinner() {
 
 #CHECK IF IT IS TIE
 Tie() {
-        for (( count = 0; count <= 8; count++ ))
+        for (( count = 1; count <= 10; count++ ))
         do
                 if [ -z "${sheet[count]}" ]
                 then
-                        echo "The game is not tie"
                         break
-                elif (( $count == 8 ))
-                then
-                        echo "****Game tie****"
-                        exit
+                else
+                        if (( $count == 9 ))
+                        then
+                                setTheBoard
+                                echo "****Game tie****"
+                                exit
+                        fi
                 fi
         done
 }
@@ -164,12 +166,34 @@ computerInitiates() {
         do
                 if [ -z "${sheet[$box]}" ]
                 then
- sheet[$box]="$computerSymbol"
+                        sheet[$box]="$computerSymbol"
                         echo "computer win check"
                         player="computer"
-                        checkWinner $computerSymbol $player
+
+  checkWinner $computerSymbol $player
                         sheet[$box]=""
- if [ $cell -eq 9 ]
+                if (( $box == 9 ))
+                then
+                         echo "This does not conclude win, keep playing"
+                         opponentBlocking
+                        fi
+                fi
+        done
+
+}
+#LETS CREATE A FUNCTION TO BLOCK THE OPPONENT
+opponentBlocking() {
+        echo "********BLOCKING THE OPPONENT********"
+        for (( cell=1;cell<10;cell++ ))
+        do
+                if [ -z "${sheet[$cell]}" ]
+                then
+                        sheet[$cell]="$playerSymbol"
+                        echo "take a look for player winning condition and if present then blocking them"
+                        checkWinningOfOpp "$playerSymbol"
+                        sheet[$cell]=""
+
+                        if [ $cell -eq 9 ]
                         then
                                 echo "********Do not have any cell for blocking********"
 
@@ -195,11 +219,24 @@ cornerPlay() {
         then
                 sheet[9]="$computerSymbol"
         else
+                echo ********No corner to block********
+                centrePlay
+        fi
+}
+
+#FUNCTION TO DETERMINE CENTRE CONDITION
+centreplay() {
+        echo "********centre blocking********"
+        if [ -z "${board[5]}" ]
+        then
+                sheet[5]="$computerSymbol"
+        else
+                echo "********There is no centre to block********"
                 computerPlay
         fi
 }
 
-#ANALYSING PLAYWER WINNING CELL FOR BLOCKING
+#ANALYSING PLAYER WINNING CELL FOR BLOCKING
 checkWinningOfOpp() {
 
         symbol2=$1
@@ -261,8 +298,3 @@ letterSymbol
 echo "system symbol = $systemSymbol"
 echo "player symbol = $playerSymbol"
 resumeGame
-
-
-
-
-
