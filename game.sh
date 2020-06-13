@@ -2,6 +2,7 @@
 
 echo "Welcome to the Tic Tac Toe game"
 #declaring the array for board positions
+flag=1;
 sheet=(1 2 3 4 5 6 7 8 9)
 number=0;
 player=1;
@@ -42,7 +43,7 @@ toss
 letterSymbols(){
 if [ $tossDecision -eq $player ]
         then
-                read -p "SELECT LETTER SYMBOL x OR o TO PLAY THE GAME: " playerSymbol
+                read -p "SELECT LETTER SYMBOL x OR  o TO PLAY THE GAME: " playerSymbol
                 if [ "$playerSymbol" == "o" ]
                 then
                         computerSymbol="x"
@@ -50,7 +51,7 @@ if [ $tossDecision -eq $player ]
                         computerSymbol="o"
                 fi
         else
-                #COMPUTER TURN RANDOMLY CHOOSES x OR o
+                #COMPUTER TURN RANDOMLY CHOOSES x or o
 
                 computerSymbolToss=$((RANDOM%2))
                 if [ $computerSymbolToss -eq 1 ]
@@ -65,6 +66,22 @@ if [ $tossDecision -eq $player ]
                 }
 letterSymbols
 
-echo "computer symbol = $computerSymbol"
-echo "player symbol = $playerSymbol"
+echo "computer symbol= $computerSymbol"
+echo "player symbol= $playerSymbol"
+
+while (( flag >= 1 ))
+do
+        if [ $tossDecision -eq $player ]
+        then
+                setTheBoard
+                read -p "ENTER POSITION ON SHEET TO START THE GAME WITH: " playerPosition
+                sheet[$playerPosition]=$playerSymbol
+                setTheBoard
+        else
+                computerPosition=$((1+RANDOM%9))
+                sheet[$computerPosition]=$computerSymbol
+                setTheBoard
+        fi
+        flag=0
+done
 
