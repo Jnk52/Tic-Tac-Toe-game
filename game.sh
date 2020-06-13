@@ -53,6 +53,7 @@ letterSymbol() {
                 fi
         fi
 }
+
 #LETS CREATE A  FUNCTION TO SEE WHO WINS
 checkWinner() {
                 symbol=$1
@@ -140,7 +141,7 @@ playerStarts() {
         fi
 }
 
-#COMPUTER STARTS TO PLAY
+#COMPUTER STARTS TO PLAY LIKE PLAYER
 computerPlay() {
         echo "****computer plays****"
         win2="computer"
@@ -168,8 +169,7 @@ resumeGame() {
                         playerStarts
                         computerPlay
                 done
-
-  else
+ else
                 while [ $flag -eq 1  ]
                 do
                         computerPlay
